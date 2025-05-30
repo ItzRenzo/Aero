@@ -34,7 +34,7 @@ public class TflyCommand implements CommandExecutor, TabCompleter {
 
         // Check if world is whitelisted for trial fly
         if (!isWorldAllowed(player)) {
-            player.sendMessage(plugin.getMessageManager().getMessage("world-restriction.not-allowed"));
+            player.sendMessage(plugin.getMessageManager().getMessage("world-restrictions.not-allowed"));
             return true;
         }
 
@@ -87,7 +87,7 @@ public class TflyCommand implements CommandExecutor, TabCompleter {
                             // Start trial fly with saved time
                             plugin.giveTrialFly(player, 0, player); // This will load and start with existing time
                             
-                            // Now toggle flight
+                            // Now toggle flight - but check world restrictions first
                             if (player.getAllowFlight()) {
                                 player.setAllowFlight(false);
                                 player.setFlying(false);
@@ -99,6 +99,12 @@ public class TflyCommand implements CommandExecutor, TabCompleter {
                                 // Mark flight as manually disabled to prevent paused actionbar from showing
                                 plugin.setFlightManuallyDisabled(player, true);
                             } else {
+                                // Check world restrictions before enabling flight
+                                if (!isWorldAllowed(player)) {
+                                    player.sendMessage(plugin.getMessageManager().getMessage("world-restrictions.not-allowed"));
+                                    return;
+                                }
+                                
                                 player.setAllowFlight(true);
                                 player.sendMessage(plugin.getMessageManager().getMessage("fly.enabled"));
                                 
@@ -141,6 +147,12 @@ public class TflyCommand implements CommandExecutor, TabCompleter {
                 player.sendMessage(plugin.getMessageManager().getMessage("trial-fly.timer.time.remaining", "time", String.valueOf(remainingTime)));
             }
         } else {
+            // Check world restrictions before enabling flight
+            if (!isWorldAllowed(player)) {
+                player.sendMessage(plugin.getMessageManager().getMessage("world-restrictions.not-allowed"));
+                return true;
+            }
+            
             // Enable flight
             player.setAllowFlight(true);
             player.sendMessage(plugin.getMessageManager().getMessage("fly.enabled"));
@@ -224,12 +236,12 @@ public class TflyCommand implements CommandExecutor, TabCompleter {
 
     private boolean isWorldAllowed(Player player) {
         // Check if world whitelist is enabled
-        if (!plugin.getConfig().getBoolean("world-whitelist.enabled", false)) {
+        if (!plugin.getConfig().getBoolean("world_restrictions.enabled", false)) {
             return true; // If whitelist is disabled, allow all worlds
         }
         
         // Get the list of allowed worlds from config
-        List<String> allowedWorlds = plugin.getConfig().getStringList("world-whitelist.worlds");
+        List<String> allowedWorlds = plugin.getConfig().getStringList("world_restrictions.whitelisted_worlds");
         String currentWorld = player.getWorld().getName();
         
         // Check if current world is in the whitelist

@@ -47,7 +47,7 @@ world_restrictions:
   
   # Whether to check world restrictions when giving trial fly
   # If false, players can receive trial fly in any world but can only use it in whitelisted worlds
-  restrict_giving: true
+  restrict_giving: false
 
 # Trial Fly Shop Configuration
 shop:

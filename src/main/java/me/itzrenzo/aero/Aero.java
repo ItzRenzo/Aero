@@ -6,6 +6,7 @@ import me.itzrenzo.aero.database.DatabaseManager;
 import me.itzrenzo.aero.gui.TflyShopGUI;
 import me.itzrenzo.aero.listeners.ShopGUIListener;
 import me.itzrenzo.aero.listeners.VoucherListener;
+import me.itzrenzo.aero.listeners.WorldRestrictionListener;
 import me.itzrenzo.aero.utils.MessageManager;
 import me.itzrenzo.aero.utils.VaultManager;
 import org.bukkit.NamespacedKey;
@@ -63,6 +64,7 @@ public final class Aero extends JavaPlugin {
         // Register event listeners
         getServer().getPluginManager().registerEvents(new VoucherListener(this), this);
         getServer().getPluginManager().registerEvents(new ShopGUIListener(this), this);
+        getServer().getPluginManager().registerEvents(new WorldRestrictionListener(this), this);
     }
 
     @Override

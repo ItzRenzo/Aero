@@ -72,12 +72,12 @@ public class VoucherListener implements Listener {
 
     private boolean isWorldAllowed(Player player) {
         // Check if world whitelist is enabled
-        if (!plugin.getConfig().getBoolean("world-whitelist.enabled", false)) {
+        if (!plugin.getConfig().getBoolean("world_restrictions.enabled", false)) {
             return true; // If whitelist is disabled, allow all worlds
         }
         
         // Get the list of allowed worlds from config
-        java.util.List<String> allowedWorlds = plugin.getConfig().getStringList("world-whitelist.worlds");
+        java.util.List<String> allowedWorlds = plugin.getConfig().getStringList("world_restrictions.whitelisted_worlds");
         String currentWorld = player.getWorld().getName();
         
         // Check if current world is in the whitelist
