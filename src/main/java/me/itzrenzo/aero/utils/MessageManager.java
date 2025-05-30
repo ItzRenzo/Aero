@@ -2,6 +2,7 @@ package me.itzrenzo.aero.utils;
 
 import me.itzrenzo.aero.Aero;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -43,20 +44,20 @@ public class MessageManager {
     
     public Component getMessage(String path) {
         String message = messagesConfig.getString(path, "&cMessage not found: " + path);
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+        return parseMessage(message);
     }
     
     public Component getMessage(String path, String placeholder, String value) {
         String message = messagesConfig.getString(path, "&cMessage not found: " + path);
         message = message.replace("{" + placeholder + "}", value);
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+        return parseMessage(message);
     }
     
     public Component getMessage(String path, String placeholder1, String value1, String placeholder2, String value2) {
         String message = messagesConfig.getString(path, "&cMessage not found: " + path);
         message = message.replace("{" + placeholder1 + "}", value1);
         message = message.replace("{" + placeholder2 + "}", value2);
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+        return parseMessage(message);
     }
     
     public Component getMessage(String path, String placeholder1, String value1, String placeholder2, String value2, String placeholder3, String value3) {
@@ -64,7 +65,7 @@ public class MessageManager {
         message = message.replace("{" + placeholder1 + "}", value1);
         message = message.replace("{" + placeholder2 + "}", value2);
         message = message.replace("{" + placeholder3 + "}", value3);
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+        return parseMessage(message);
     }
     
     public Component getMessage(String key, String... replacements) {
@@ -77,7 +78,25 @@ public class MessageManager {
             message = message.replace(placeholder, replacement);
         }
         
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+        return parseMessage(message);
+    }
+
+    private Component parseMessage(String message) {
+        // Check if message contains custom formatting tags
+        boolean removeItalic = message.contains("<!italic>");
+        
+        // Remove custom tags before parsing
+        message = message.replace("<!italic>", "");
+        
+        // Parse with legacy serializer
+        Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+        
+        // Apply custom formatting
+        if (removeItalic) {
+            component = component.decoration(TextDecoration.ITALIC, false);
+        }
+        
+        return component;
     }
 
     public void reloadMessages() {

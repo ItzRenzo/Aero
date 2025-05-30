@@ -110,11 +110,11 @@ shop:
     title: "&b&lTrial Fly Shop"
   
   item:
-    name: "&e&l{time}s Trial Fly &7- &a${price}"
+    name: "<!italic>&e&l{time}s Trial Fly &7- &a${price}"
     lore:
-      time: "&7Flight Time: &e{time} seconds"
-      price: "&7Price: &a${price}"
-      click: "&e▶ Click to purchase!"
+      time: "<!italic>&7Flight Time: &e{time} seconds"
+      price: "<!italic>&7Price: &a${price}"
+      click: "<!italic>&e▶ Click to purchase!"
   
   purchase:
     success: "&aSuccessfully purchased {time} seconds of trial fly for ${price}!"
