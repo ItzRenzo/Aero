@@ -48,3 +48,50 @@ world_restrictions:
   # Whether to check world restrictions when giving trial fly
   # If false, players can receive trial fly in any world but can only use it in whitelisted worlds
   restrict_giving: true
+
+# Trial Fly Shop Configuration
+shop:
+  # GUI Settings
+  gui:
+    title: "&b&lTrial Fly Shop"
+    size: 27  # Must be multiple of 9 (9, 18, 27, 36, 45, 54)
+    fill-empty: true
+    filler-material: "GRAY_STAINED_GLASS_PANE"
+    close-after-purchase: true
+  
+  # Currency Settings
+  currency:
+    type: "vault"  # "vault", "exp", or "levels"
+  
+  # Shop Items (list of item keys)
+  items:
+    - "flight_5min"
+    - "flight_10min"
+    - "flight_30min"
+    - "flight_1hour"
+  
+  # Item Configurations
+  items-config:
+    flight_5min:
+      slot: 10
+      material: "FEATHER"
+      time: 300  # 5 minutes in seconds
+      price: 50  # Price in selected currency
+    
+    flight_10min:
+      slot: 12
+      material: "ELYTRA"
+      time: 600  # 10 minutes in seconds
+      price: 90
+    
+    flight_30min:
+      slot: 14
+      material: "PHANTOM_MEMBRANE"
+      time: 1800  # 30 minutes in seconds
+      price: 250
+    
+    flight_1hour:
+      slot: 16
+      material: "NETHER_STAR"
+      time: 3600  # 1 hour in seconds
+      price: 450

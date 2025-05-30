@@ -3,8 +3,12 @@ package me.itzrenzo.aero;
 import me.itzrenzo.aero.commands.AeroCommand;
 import me.itzrenzo.aero.commands.TflyCommand;
 import me.itzrenzo.aero.database.DatabaseManager;
+import me.itzrenzo.aero.gui.TflyShopGUI;
+import me.itzrenzo.aero.listeners.ShopGUIListener;
 import me.itzrenzo.aero.listeners.VoucherListener;
 import me.itzrenzo.aero.utils.MessageManager;
+import me.itzrenzo.aero.utils.VaultManager;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,6 +27,8 @@ public final class Aero extends JavaPlugin {
     private Map<UUID, Boolean> playerFlightDisabled = new HashMap<>();
     private MessageManager messageManager;
     private DatabaseManager databaseManager;
+    private VaultManager vaultManager;
+    private TflyShopGUI shopGUI;
     private BukkitRunnable autoSaveTask;
 
     @Override
@@ -37,6 +43,10 @@ public final class Aero extends JavaPlugin {
         messageManager = new MessageManager(this);
         databaseManager = new DatabaseManager(this);
         databaseManager.initialize();
+        vaultManager = new VaultManager(this);
+        
+        // Initialize shop GUI
+        shopGUI = new TflyShopGUI(this);
         
         // Start auto-save task if enabled
         startAutoSaveTask();
@@ -52,6 +62,7 @@ public final class Aero extends JavaPlugin {
         
         // Register event listeners
         getServer().getPluginManager().registerEvents(new VoucherListener(this), this);
+        getServer().getPluginManager().registerEvents(new ShopGUIListener(this), this);
     }
 
     @Override
@@ -304,5 +315,20 @@ public final class Aero extends JavaPlugin {
 
     public boolean isFlightManuallyDisabled(Player player) {
         return playerFlightDisabled.getOrDefault(player.getUniqueId(), false);
+    }
+
+    // Shop GUI getter
+    public TflyShopGUI getShopGUI() {
+        return shopGUI;
+    }
+
+    // VaultManager getter
+    public VaultManager getVaultManager() {
+        return vaultManager;
+    }
+
+    // Helper method for creating NamespacedKeys
+    public NamespacedKey createNamespacedKey(String key) {
+        return new NamespacedKey(this, key);
     }
 }

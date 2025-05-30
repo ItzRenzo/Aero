@@ -67,7 +67,29 @@ public class MessageManager {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
     }
     
+    public Component getMessage(String key, String... replacements) {
+        String message = messagesConfig.getString(key, "&cMessage not found: " + key);
+        
+        // Apply replacements in pairs (key, value)
+        for (int i = 0; i < replacements.length - 1; i += 2) {
+            String placeholder = "{" + replacements[i] + "}";
+            String replacement = replacements[i + 1];
+            message = message.replace(placeholder, replacement);
+        }
+        
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+    }
+
     public void reloadMessages() {
+        // Reload the messages.yml file
+        plugin.reloadConfig();
+        
+        File messagesFile = new File(plugin.getDataFolder(), "messages.yml");
+        if (!messagesFile.exists()) {
+            plugin.saveResource("messages.yml", false);
+        }
+        
         messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
+        plugin.getLogger().info("Messages configuration reloaded successfully!");
     }
 }

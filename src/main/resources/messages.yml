@@ -8,14 +8,17 @@ command:
   no-permission-give: "&cYou don't have permission to give trial fly!"
   no-permission-toggle: "&cYou don't have permission to toggle fly!"
   no-permission-voucher: "&cYou don't have permission to create trial fly vouchers!"
+  no-permission-shop: "&cYou don't have permission to access the trial fly shop!"
+  no-permission-reload: "&cYou don't have permission to reload the plugin!"
   only-players: "&cOnly players can use this command!"
   
   usage:
-    aero: "&cUsage: /aero tfly <give|time|stats|voucher> [args]"
+    aero: "&cUsage: /aero tfly <give|time|stats|voucher|shop> [args]"
     aero-give: "&cUsage: /aero tfly give <player> <time>"
     aero-time: "&cUsage: /aero tfly time [player]"
     aero-stats: "&cUsage: /aero tfly stats [player]"
     aero-voucher: "&cUsage: /aero tfly voucher <time> [amount] [player]"
+    aero-shop: "&cUsage: /aero tfly shop [player]"
     tfly: "&cUsage: /tfly [time|stats|actionbar]"
 
 # Trial Fly Messages
@@ -100,3 +103,28 @@ voucher:
   given: "&aGave {amount}x Trial Fly Voucher ({time}s each) to {player}!"
   used: "&aVoucher redeemed! You received {time} seconds of trial fly!"
   invalid: "&cThis voucher appears to be corrupted!"
+
+# Shop Messages
+shop:
+  gui:
+    title: "&b&lTrial Fly Shop"
+  
+  item:
+    name: "&e&l{time}s Trial Fly &7- &a${price}"
+    lore:
+      time: "&7Flight Time: &e{time} seconds"
+      price: "&7Price: &a${price}"
+      click: "&e▶ Click to purchase!"
+  
+  purchase:
+    success: "&aSuccessfully purchased {time} seconds of trial fly for ${price}!"
+
+# Reload Messages
+reload:
+  success: "&aAero plugin configuration and messages reloaded successfully!"
+
+currency:
+    vault-not-supported: "&cVault economy is not supported yet!"
+    insufficient-exp: "&cInsufficient experience! Required: {required}, You have: {current}"
+    insufficient-levels: "&cInsufficient levels! Required: {required}, You have: {current}"
+    insufficient-money: "&cInsufficient funds! Required: ${required}, You have: ${current}"

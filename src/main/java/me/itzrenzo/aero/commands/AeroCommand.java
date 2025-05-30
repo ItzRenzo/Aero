@@ -28,13 +28,25 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length < 2) {
+        if (args.length < 1) {
             sender.sendMessage(plugin.getMessageManager().getMessage("command.usage.aero"));
             return true;
         }
 
-        if (!args[0].equalsIgnoreCase("tfly")) {
+        String subcommand = args[0].toLowerCase();
+        
+        // Handle reload command
+        if (subcommand.equals("reload")) {
+            return handleReloadCommand(sender);
+        }
+        
+        if (!subcommand.equals("tfly")) {
             sender.sendMessage(plugin.getMessageManager().getMessage("error.unknown-subcommand"));
+            return true;
+        }
+
+        if (args.length < 2) {
+            sender.sendMessage(plugin.getMessageManager().getMessage("command.usage.aero"));
             return true;
         }
 
@@ -49,10 +61,24 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
                 return handleStatsCommand(sender, args);
             case "voucher":
                 return handleVoucherCommand(sender, args);
+            case "shop":
+                return handleShopCommand(sender, args);
             default:
                 sender.sendMessage(plugin.getMessageManager().getMessage("error.unknown-action"));
                 return true;
         }
+    }
+
+    private boolean handleReloadCommand(CommandSender sender) {
+        if (!sender.hasPermission("aero.reload")) {
+            sender.sendMessage(plugin.getMessageManager().getMessage("command.no-permission-reload"));
+            return true;
+        }
+
+        plugin.reloadConfig();
+        plugin.getMessageManager().reloadMessages();
+        sender.sendMessage(plugin.getMessageManager().getMessage("reload.success"));
+        return true;
     }
 
     private boolean handleGiveCommand(CommandSender sender, String[] args) {
@@ -313,6 +339,45 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
         return voucher;
     }
 
+    private boolean handleShopCommand(CommandSender sender, String[] args) {
+        // Usage: /aero tfly shop [player]
+        if (!(sender instanceof Player) && args.length == 2) {
+            sender.sendMessage(plugin.getMessageManager().getMessage("command.only-players"));
+            return true;
+        }
+
+        if (!sender.hasPermission("aero.tfly.shop")) {
+            sender.sendMessage(plugin.getMessageManager().getMessage("command.no-permission-shop"));
+            return true;
+        }
+
+        Player target;
+        if (args.length == 3) {
+            // Open shop for another player (admin command)
+            if (!sender.hasPermission("aero.tfly.give")) {
+                sender.sendMessage(plugin.getMessageManager().getMessage("command.no-permission-give"));
+                return true;
+            }
+            
+            String playerName = args[2];
+            target = Bukkit.getPlayer(playerName);
+
+            if (target == null || !target.isOnline()) {
+                sender.sendMessage(plugin.getMessageManager().getMessage("error.player-not-found", "player", playerName));
+                return true;
+            }
+            
+            sender.sendMessage(plugin.getMessageManager().getMessage("shop.opened", "player", target.getName()));
+        } else {
+            // Open shop for yourself
+            target = (Player) sender;
+        }
+
+        // Open the shop GUI for the player
+        plugin.getShopGUI().openShop(target);
+        return true;
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> completions = new ArrayList<>();
@@ -324,8 +389,12 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
         switch (args.length) {
             case 1:
                 // First argument: subcommands
-                if ("tfly".startsWith(args[0].toLowerCase())) {
+                String partial = args[0].toLowerCase();
+                if ("tfly".startsWith(partial)) {
                     completions.add("tfly");
+                }
+                if ("reload".startsWith(partial) && sender.hasPermission("aero.reload")) {
+                    completions.add("reload");
                 }
                 break;
 
@@ -344,6 +413,9 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
                     if ("voucher".startsWith(args[1].toLowerCase())) {
                         completions.add("voucher");
                     }
+                    if ("shop".startsWith(args[1].toLowerCase())) {
+                        completions.add("shop");
+                    }
                 }
                 break;
 
@@ -352,11 +424,11 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
                 if (args[0].equalsIgnoreCase("tfly")) {
                     if (args[1].equalsIgnoreCase("give") || args[1].equalsIgnoreCase("time") || args[1].equalsIgnoreCase("stats")) {
                         // Player names for give/time/stats commands
-                        String partial = args[2].toLowerCase();
+                        String playerPartial = args[2].toLowerCase();
                         completions.addAll(
                             Bukkit.getOnlinePlayers().stream()
                                 .map(Player::getName)
-                                .filter(name -> name.toLowerCase().startsWith(partial))
+                                .filter(name -> name.toLowerCase().startsWith(playerPartial))
                                 .collect(Collectors.toList())
                         );
                     } else if (args[1].equalsIgnoreCase("voucher")) {
@@ -364,12 +436,14 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
                         List<String> timeSuggestions = Arrays.asList(
                             "30", "60", "120", "300", "600", "900", "1800", "3600"
                         );
-                        String partial = args[2].toLowerCase();
+                        String timePartial = args[2].toLowerCase();
                         completions.addAll(
                             timeSuggestions.stream()
-                                .filter(time -> time.startsWith(partial))
+                                .filter(time -> time.startsWith(timePartial))
                                 .collect(Collectors.toList())
                         );
+                    } else if (args[1].equalsIgnoreCase("shop")) {
+                        // No completions for shop command
                     }
                 }
                 break;
@@ -382,21 +456,23 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
                         List<String> timeSuggestions = Arrays.asList(
                             "30", "60", "120", "300", "600", "900", "1800", "3600"
                         );
-                        String partial = args[3].toLowerCase();
+                        String giveTimePartial = args[3].toLowerCase();
                         completions.addAll(
                             timeSuggestions.stream()
-                                .filter(time -> time.startsWith(partial))
+                                .filter(time -> time.startsWith(giveTimePartial))
                                 .collect(Collectors.toList())
                         );
                     } else if (args[1].equalsIgnoreCase("voucher")) {
                         // Amount suggestions for voucher command
                         List<String> amountSuggestions = Arrays.asList("1", "2", "3", "4", "5", "10", "16", "32", "64");
-                        String partial = args[3].toLowerCase();
+                        String amountPartial = args[3].toLowerCase();
                         completions.addAll(
                             amountSuggestions.stream()
-                                .filter(amount -> amount.startsWith(partial))
+                                .filter(amount -> amount.startsWith(amountPartial))
                                 .collect(Collectors.toList())
                         );
+                    } else if (args[1].equalsIgnoreCase("shop")) {
+                        // No completions for shop command
                     }
                 }
                 break;
@@ -404,11 +480,11 @@ public class AeroCommand implements CommandExecutor, TabCompleter {
             case 5:
                 // Fifth argument: player names for voucher command
                 if (args[0].equalsIgnoreCase("tfly") && args[1].equalsIgnoreCase("voucher")) {
-                    String partial = args[4].toLowerCase();
+                    String voucherPlayerPartial = args[4].toLowerCase();
                     completions.addAll(
                         Bukkit.getOnlinePlayers().stream()
                             .map(Player::getName)
-                            .filter(name -> name.toLowerCase().startsWith(partial))
+                            .filter(name -> name.toLowerCase().startsWith(voucherPlayerPartial))
                             .collect(Collectors.toList())
                     );
                 }

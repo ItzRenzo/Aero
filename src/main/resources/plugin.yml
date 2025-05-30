@@ -4,6 +4,7 @@ main: me.itzrenzo.aero.Aero
 api-version: '1.21'
 load: STARTUP
 authors: [ ItzRenzo ]
+softdepend: [Vault]
 commands:
   aero:
     description: Main command for Aero plugin
@@ -25,3 +26,12 @@ permissions:
   aero.tfly.toggle:
     description: Allows toggling own fly mode
     default: true
+  aero.tfly.voucher:
+    description: Allows creating trial fly vouchers
+    default: op
+  aero.tfly.shop:
+    description: Allows accessing the trial fly shop
+    default: true
+  aero.reload:
+    description: Allows reloading the plugin configuration
+    default: op
