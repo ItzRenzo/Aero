@@ -1,0 +1,27 @@
+name: Aero
+version: '1.0'
+main: me.itzrenzo.aero.Aero
+api-version: '1.21'
+load: STARTUP
+authors: [ ItzRenzo ]
+commands:
+  aero:
+    description: Main command for Aero plugin
+    usage: /aero tfly give <player> <time>
+    permission: aero.use
+    permission-message: You don't have permission to use this command!
+  tfly:
+    description: Toggle your own fly mode
+    usage: /tfly
+    permission: aero.tfly.toggle
+    permission-message: You don't have permission to toggle fly!
+permissions:
+  aero.use:
+    description: Allows use of aero commands
+    default: op
+  aero.tfly.give:
+    description: Allows giving trial fly to players
+    default: op
+  aero.tfly.toggle:
+    description: Allows toggling own fly mode
+    default: true

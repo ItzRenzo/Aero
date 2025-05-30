@@ -1,0 +1,50 @@
+# Aero Plugin Configuration
+
+# Database Configuration
+database:
+  # Database type: "sqlite" or "mysql"
+  type: "sqlite"
+  
+  # SQLite Configuration (used when type is "sqlite")
+  sqlite:
+    # Database file name (will be created in plugin folder)
+    filename: "aero.db"
+  
+  # MySQL Configuration (used when type is "mysql")
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "aero"
+    username: "your_username"
+    password: "your_password"
+    # Connection pool settings
+    max_pool_size: 10
+    connection_timeout: 30000
+
+# Plugin Settings
+settings:
+  # Save flight time data every X seconds (0 to disable auto-save)
+  auto_save_interval: 300
+  
+  # Debug mode (prints database operations to console)
+  debug: false
+  
+  # Show actionbar countdown when flying (true/false)
+  actionbar_countdown: true
+
+# World Restrictions
+world_restrictions:
+  # Enable world whitelist (true/false)
+  # If enabled, trial fly can only be used in whitelisted worlds
+  enabled: false
+  
+  # List of worlds where trial fly is allowed
+  # If empty and enabled is true, trial fly will be disabled in all worlds
+  whitelisted_worlds:
+    - "world"
+    - "world_nether"
+    - "world_the_end"
+  
+  # Whether to check world restrictions when giving trial fly
+  # If false, players can receive trial fly in any world but can only use it in whitelisted worlds
+  restrict_giving: true

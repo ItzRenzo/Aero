@@ -1,0 +1,102 @@
+# Aero Plugin Messages Configuration
+# Use & for color codes (e.g., &c for red, &a for green)
+# Use {player} for player names, {time} for time values
+
+# Command Messages
+command:
+  no-permission: "&cYou don't have permission to use this command!"
+  no-permission-give: "&cYou don't have permission to give trial fly!"
+  no-permission-toggle: "&cYou don't have permission to toggle fly!"
+  no-permission-voucher: "&cYou don't have permission to create trial fly vouchers!"
+  only-players: "&cOnly players can use this command!"
+  
+  usage:
+    aero: "&cUsage: /aero tfly <give|time|stats|voucher> [args]"
+    aero-give: "&cUsage: /aero tfly give <player> <time>"
+    aero-time: "&cUsage: /aero tfly time [player]"
+    aero-stats: "&cUsage: /aero tfly stats [player]"
+    aero-voucher: "&cUsage: /aero tfly voucher <time> [amount] [player]"
+    tfly: "&cUsage: /tfly [time|stats|actionbar]"
+
+# Trial Fly Messages
+trial-fly:
+  given: "&aYou have been given trial fly for {time} seconds!"
+  given-sender: "&aTrial fly given to {player} for {time} seconds."
+  extended: "&aTrial fly time extended! Total time: {time} seconds!"
+  extended-sender: "&aTrial fly time stacked for {player}. Total time: {time} seconds."
+  expired: "&cYour trial fly has expired!"
+  safe-landing: "&eYou have been safely teleported to the ground."
+  
+  warnings:
+    sixty: "&eTrial fly expires in {time} seconds!"
+    thirty: "&eTrial fly expires in {time} seconds!"
+    ten: "&eTrial fly expires in {time} seconds!"
+    five: "&eTrial fly expires in {time} seconds!"
+    countdown: "&cTrial fly expires in {time} second{s}!"
+    
+  timer:
+    time:
+      remaining: "&aTrial fly time remaining: {time} seconds"
+      remaining-other: "&a{player} has {time} seconds of trial fly remaining"
+      no-trial-fly: "&cYou don't have any active trial fly!"
+      no-trial-fly-other: "&c{player} doesn't have any active trial fly!"
+
+# World Restriction Messages
+world-restrictions:
+  not-allowed: "&cTrial fly is not allowed in this world!"
+  not-allowed-giving: "&cCannot give trial fly to {player} - they are not in an allowed world!"
+  current-world-not-allowed: "&cYour current world '{world}' is not whitelisted for trial fly!"
+  moved-to-restricted-world: "&cYou moved to a restricted world! Trial fly has been paused."
+  moved-to-allowed-world: "&aYou entered an allowed world! Trial fly has been resumed."
+
+# Flight Statistics Messages
+stats:
+  header: "&6=== Flight Statistics for {player} ==="
+  total-time: "&eCurrent Session: &f{current} seconds"
+  session-time: "&eTotal Flight Time: &f{total} seconds"
+  formatted-total: "&eTotal Flight Time: &f{hours}h {minutes}m {seconds}s"
+  no-stats: "&cNo flight statistics found for {player}"
+  loading: "&eLoading flight statistics..."
+
+# Action Bar Messages
+actionbar:
+  trial-fly-countdown: "&e⏰ Trial Fly: &f{time}s &7| &aFlying"
+  trial-fly-paused: "&e⏰ Trial Fly: &f{time}s &7| &cPaused"
+  toggle-enabled: "&aActionbar countdown enabled!"
+  toggle-disabled: "&cActionbar countdown disabled!"
+
+# Regular Fly Messages
+fly:
+  enabled: "&aFlight enabled!"
+  disabled: "&cFlight disabled!"
+
+# Database Messages
+database:
+  save-success: "&aFlight data saved successfully!"
+  save-error: "&cFailed to save flight data!"
+  load-error: "&cFailed to load flight data!"
+  connection-error: "&cDatabase connection error!"
+
+# Error Messages
+error:
+  player-not-found: "&cPlayer '{player}' is not online!"
+  invalid-time: "&cTime must be a positive number!"
+  invalid-time-format: "&cInvalid time format! Please enter a number in seconds."
+  invalid-amount: "&cAmount must be between 1 and 64!"
+  invalid-amount-format: "&cInvalid amount format! Please enter a number between 1 and 64."
+  inventory-full: "&c{player}'s inventory is full! Cannot give voucher."
+  unknown-subcommand: "&cUnknown subcommand. Use: /aero tfly <give|time|stats|voucher> [args]"
+  unknown-action: "&cUnknown action. Use: /aero tfly <give|time|stats|voucher> [args]"
+
+# Voucher Messages
+voucher:
+  name: "&b&lTrial Fly Voucher &7({time}s)"
+  lore:
+    line1: "&7Right-click to redeem"
+    line2: "&7Trial Fly Time: &e{time} seconds"
+    line3: "&7This voucher is consumed on use"
+  
+  received: "&aYou received {amount}x Trial Fly Voucher ({time}s each)!"
+  given: "&aGave {amount}x Trial Fly Voucher ({time}s each) to {player}!"
+  used: "&aVoucher redeemed! You received {time} seconds of trial fly!"
+  invalid: "&cThis voucher appears to be corrupted!"
