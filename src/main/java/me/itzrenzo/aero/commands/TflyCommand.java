@@ -70,8 +70,19 @@ public class TflyCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        // Handle /tfly shop command
+        if (args.length == 1 && args[0].equalsIgnoreCase("shop")) {
+            if (!player.hasPermission("aero.shop.access")) {
+                player.sendMessage(plugin.getMessageManager().getMessage("command.no-permission"));
+                return true;
+            }
+            
+            plugin.getShopGUI().openShop(player);
+            return true;
+        }
+
         // Handle regular /tfly toggle
-        if (args.length > 0 && !args[0].equalsIgnoreCase("time") && !args[0].equalsIgnoreCase("stats") && !args[0].equalsIgnoreCase("actionbar")) {
+        if (args.length > 0 && !args[0].equalsIgnoreCase("time") && !args[0].equalsIgnoreCase("stats") && !args[0].equalsIgnoreCase("actionbar") && !args[0].equalsIgnoreCase("shop")) {
             player.sendMessage(plugin.getMessageManager().getMessage("command.usage.tfly"));
             return true;
         }
@@ -223,6 +234,9 @@ public class TflyCommand implements CommandExecutor, TabCompleter {
                 }
                 if ("actionbar".startsWith(partial)) {
                     completions.add("actionbar");
+                }
+                if ("shop".startsWith(partial)) {
+                    completions.add("shop");
                 }
                 break;
 
