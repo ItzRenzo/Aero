@@ -144,7 +144,23 @@ public class TflyShopGUI {
     }
 
     public boolean isShopGUI(Inventory inventory) {
-        return inventory.getSize() == guiSize && 
-               inventory.getViewers().size() > 0;
+        // Check if this inventory was created by our shop GUI
+        // We'll use a more reliable method by checking if the inventory contains our shop items
+        if (inventory.getSize() != guiSize) {
+            return false;
+        }
+        
+        // Check if any item in the inventory has our shop item marker
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta() != null) {
+                if (item.getItemMeta().getPersistentDataContainer().has(
+                    plugin.createNamespacedKey("shop_item"), 
+                    org.bukkit.persistence.PersistentDataType.STRING)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 }
