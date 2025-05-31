@@ -118,6 +118,9 @@ shop:
   
   purchase:
     success: "&aSuccessfully purchased {time} seconds of trial fly for ${price}!"
+  
+  currency:
+    insufficient-money: "&cInsufficient funds! Required: ${required}, You have: ${current}"
 
 # Reload Messages
 reload:
